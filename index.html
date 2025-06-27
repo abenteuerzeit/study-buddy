@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CCNA - Certification Prep</title>
+    <meta
+      name="description"
+      content="CCNA certification preparation dashboard with spaced repetition, flashcards, and adaptive learning"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="loadingScreen" class="loading-screen">
+      <div class="loading-spinner"></div>
+      <p class="mt-4 text-lg">Loading CCNA Prep Dashboard...</p>
+    </div>
+
+    <div id="messageModal" class="modal hidden" aria-modal="true" role="dialog">
+      <div class="modal-content">
+        <p id="modalMessage" class="text-lg font-medium"></p>
+        <button id="modalCloseBtn">OK</button>
+      </div>
+    </div>
+
+    <header class="bg-bg-secondary shadow-lg border-b border-border">
+      <div
+        class="container flex flex-col lg:flex-row justify-between items-center py-4 mainHeader"
+      >
+        <div class="flex items-center space-x-3 mb-4 lg:mb-0">
+          <div
+            class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center"
+          >
+            <i class="fas fa-network-wired text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold">CCNA Prep</h1>
+            <p class="text-sm text-text-secondary"
+              >Professional Certification Preparation</p
+            >
+          </div>
+        </div>
+        <nav class="flex flex-wrap justify-center gap-4">
+          <button id="toggleStudyBtn" class="btn btn-success">
+            <i class="fas fa-graduation-cap mr-2"></i>Flashcards
+          </button>
+          <button id="toggleStatsBtn" class="btn btn-info">
+            <i class="fas fa-chart-line mr-2"></i>Statistics
+          </button>
+          <button id="exportProgressBtn" class="btn btn-secondary">
+            <i class="fas fa-download mr-2"></i>Export
+          </button>
+          <input
+            type="file"
+            id="importProgressInput"
+            class="hidden"
+            accept=".json"
+            aria-label="Import progress file"
+          />
+          <button id="importProgressBtn" class="btn btn-secondary">
+            <i class="fas fa-upload mr-2"></i>Import
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container py-8 flex-grow">
+      <section
+        id="studyMode"
+        class="card mb-8 hidden section-fade-in"
+        aria-hidden="true"
+      >
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-accent-cyan flex items-center">
+            <i class="fas fa-graduation-cap mr-3"></i>
+            Flashcards
+          </h2>
+          <div class="flex items-center space-x-4">
+            <div class="stat-card">
+              <div class="stat-value" id="totalCardsCount">0</div>
+              <div class="text-xs text-text-muted">Total Cards</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="studyStreakCount">0</div>
+              <div class="text-xs text-text-muted">Study Streak</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div class="space-y-4">
+            <label for="studyCategorySelect" class="block text-sm font-medium">
+              <i class="fas fa-filter mr-2"></i>Category Filter
+            </label>
+            <select
+              id="studyCategorySelect"
+              class="form-control"
+              aria-describedby="studyCategoryHelp"
+            >
+              <option value="all">All Categories</option>
+            </select>
+            <p id="studyCategoryHelp" class="text-xs text-text-muted"
+              >Select a specific CCNA topic to focus on</p
+            >
+          </div>
+
+          <div class="space-y-4">
+            <label for="sourceSelect" class="block text-sm font-medium">
+              <i class="fas fa-book mr-2"></i>Source Filter
+            </label>
+            <select id="sourceSelect" class="form-control">
+              <option value="all">All Sources</option>
+            </select>
+          </div>
+
+          <div class="space-y-4">
+            <label for="chapterSelect" class="block text-sm font-medium">
+              <i class="fas fa-bookmark mr-2"></i>Chapter Filter
+            </label>
+            <select id="chapterSelect" class="form-control">
+              <option value="all">All Chapters</option>
+            </select>
+          </div>
+
+          <div class="lg:col-span-3 space-y-4">
+            <label for="searchInput" class="block text-sm font-medium">
+              <i class="fas fa-search mr-2"></i>Search
+            </label>
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control"
+              placeholder="Find cards containing terms or definitions..."
+            />
+          </div>
+
+          <div class="flex flex-col justify-end space-y-2"> </div>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium">Session Progress</span>
+            <span id="progressText" class="text-sm text-text-muted"
+              >0% Complete</span
+            >
+          </div>
+          <div class="progress-bar">
+            <div
+              id="progressFill"
+              class="progress-fill"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+
+        <div
+          id="flashcardContainer"
+          class="flashcard mb-8"
+          role="button"
+          tabindex="0"
+          aria-label="Flashcard"
+        >
+          <img
+            id="flashcardImage"
+            src=""
+            alt="Related Image"
+            class="flashcard-image hidden"
+          />
+          <div id="flashcardQuestion" class="text-lg font-medium mb-4">
+            Load questions to start your CCNA study session!
+          </div>
+          <input
+            type="text"
+            id="flashcardAnswerInput"
+            class="form-control mb-4 hidden"
+            placeholder="Type your answer here"
+          />
+          <button id="submitFlashcardAnswerBtn" class="btn btn-primary hidden"
+            >Submit Answer</button
+          >
+          <div
+            id="flashcardAnswer"
+            class="text-xl font-bold text-accent-green hidden"
+          >
+            Answer will appear here
+          </div>
+          <div
+            id="flashcardFeedback"
+            class="text-xl font-bold mt-4 hidden"
+          ></div>
+
+          <div class="absolute top-4 left-4 flex items-center space-x-4">
+            <span
+              id="questionCounter"
+              class="text-sm bg-bg-accent px-3 py-1 rounded-full"
+              >0/0</span
+            >
+            <span
+              id="flashcardDifficulty"
+              class="text-xs px-2 py-1 rounded-full bg-gray-600"
+              >N/A</span
+            >
+          </div>
+          <div class="absolute bottom-4 left-4">
+            <span id="flashcardCategory" class="text-xs text-text-muted"
+              >Category: N/A</span
+            >
+          </div>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4">
+          <button id="prevBtn" class="btn btn-secondary">
+            <i class="fas fa-chevron-left mr-2"></i>Previous
+          </button>
+          <button id="revealBtn" class="btn btn-primary">
+            <i class="fas fa-eye mr-2"></i>Reveal Answer
+          </button>
+          <button id="nextBtn" class="btn btn-secondary">
+            Next<i class="fas fa-chevron-right ml-2"></i>
+          </button>
+          <button id="knowItBtn" class="btn btn-success hidden">
+            <i class="fas fa-check mr-2"></i>I Know This
+          </button>
+          <button id="studyMoreBtn" class="btn btn-warning hidden">
+            <i class="fas fa-book mr-2"></i>Study More
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="statistics"
+        class="card mb-8 hidden section-fade-in"
+        aria-hidden="true"
+      >
+        <h2 class="text-2xl font-bold text-accent-cyan flex items-center mb-6">
+          <i class="fas fa-chart-line mr-3"></i>
+          Your Learning Statistics
+        </h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <div class="stat-card">
+            <div class="stat-value text-accent-blue" id="totalCardsStat">0</div>
+            <div class="text-sm text-text-muted">Total Unique Cards</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value text-accent-green" id="masteredCardsStat"
+              >0</div
+            >
+            <div class="text-sm text-text-muted">Mastered Cards</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value text-accent-yellow" id="cardsDueStat">0</div>
+            <div class="text-sm text-text-muted">Cards Due for Review</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value text-accent-purple" id="studyStreakStat"
+              >0</div
+            >
+            <div class="text-sm text-text-muted">Current Study Streak</div>
+          </div>
+          <div class="stat-card">
+            <div
+              class="stat-value text-accent-orange"
+              id="flashcardAccuracyStat"
+              >0%</div
+            >
+            <div class="text-sm text-text-muted"
+              >Overall Flashcard Accuracy</div
+            >
+          </div>
+          <div class="stat-card">
+            <div class="stat-value text-accent-red" id="longestStreakStat"
+              >0</div
+            >
+            <div class="text-sm text-text-muted">Longest Study Streak</div>
+          </div>
+        </div>
+
+        <div class="mt-8 text-text-secondary">
+          <h3 class="text-xl font-semibold mb-3">Understanding Your Stats:</h3>
+          <ul class="list-disc list-inside space-y-2">
+            <li
+              ><strong class="text-accent-blue">Total Unique Cards:</strong> The
+              total number of distinct flashcards you have in your quiz
+              data.</li
+            >
+            <li
+              ><strong class="text-accent-green">Mastered Cards:</strong> Cards
+              you consistently answer correctly, pushed far into the future for
+              review.</li
+            >
+            <li
+              ><strong class="text-yellow-400">Cards Due for Review:</strong>
+              Cards that the spaced repetition algorithm recommends you review
+              today to reinforce memory.</li
+            >
+            <li
+              ><strong class="text-accent-purple">Current Study Streak:</strong>
+              Consecutive days you've engaged with the dashboard.</li
+            >
+            <li
+              ><strong class="text-accent-orange"
+                >Overall Flashcard Accuracy:</strong
+              >
+              Your average correct answer rate across all flashcard
+              sessions.</li
+            >
+            <li
+              ><strong class="text-accent-red">Longest Study Streak:</strong>
+              Your best consecutive study days record.</li
+            >
+          </ul>
+        </div>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
