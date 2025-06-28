@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CCNA - Certification Prep</title>
+    <title>Study Buddy</title>
     <meta
       name="description"
-      content="CCNA certification preparation dashboard with spaced repetition, flashcards, and adaptive learning"
+      content="Study Buddy: Flashcard e-learning application for memorization using spaced repetition and adaptive learning."
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -22,7 +22,7 @@
   <body>
     <div id="loadingScreen" class="loading-screen">
       <div class="loading-spinner"></div>
-      <p class="mt-4 text-lg">Loading CCNA Prep Dashboard...</p>
+      <p class="mt-4 text-lg">Loading Study Buddy...</p>
     </div>
 
     <div id="messageModal" class="modal hidden" aria-modal="true" role="dialog">
@@ -40,18 +40,18 @@
           <div
             class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center"
           >
-            <i class="fas fa-network-wired text-white"></i>
+            <i class="fas fa-brain text-white"></i>
           </div>
           <div>
-            <h1 class="text-2xl font-bold">CCNA Prep</h1>
+            <h1 class="text-2xl font-bold">Study Buddy</h1>
             <p class="text-sm text-text-secondary"
-              >Professional Certification Preparation</p
+              >Spaced Repetition & Adaptive Learning</p
             >
           </div>
         </div>
         <nav class="flex flex-wrap justify-center gap-4">
           <button id="toggleStudyBtn" class="btn btn-success">
-            <i class="fas fa-graduation-cap mr-2"></i>Flashcards
+            <i class="fas fa-graduation-cap mr-2"></i>Study
           </button>
           <button id="toggleStatsBtn" class="btn btn-info">
             <i class="fas fa-chart-line mr-2"></i>Statistics
@@ -72,7 +72,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-between mb-6">
           <h2 class="text-2xl font-bold text-accent-cyan flex items-center mb-4 sm:mb-0">
             <i class="fas fa-graduation-cap mr-3"></i>
-            Flashcards
+            Study Session
           </h2>
           <div class="flex items-center space-x-4">
             <div class="stat-card">
@@ -116,7 +116,7 @@
             class="flashcard-image hidden"
           />
           <div id="flashcardQuestion" class="text-lg font-medium mb-4">
-            Load questions to start your CCNA study session!
+            Load questions to start your study session!
           </div>
           <input
             type="text"
@@ -232,8 +232,7 @@
           <ul class="list-disc list-inside space-y-2">
             <li
               ><strong class="text-accent-blue">Total Unique Cards:</strong> The
-              total number of distinct flashcards you have in your quiz
-              data.</li
+              total number of distinct flashcards you have in your data.</li
             >
             <li
               ><strong class="text-accent-green">Mastered Cards:</strong> Cards
@@ -247,7 +246,7 @@
             >
             <li
               ><strong class="text-accent-purple">Current Study Streak:</strong>
-              Consecutive days you've engaged with the dashboard.</li
+              Consecutive days you've engaged with Study Buddy.</li
             >
             <li
               ><strong class="text-accent-orange"
@@ -328,7 +327,7 @@
                                 <option value="all">All Categories</option>
                             </select>
                             <p id="studyCategoryHelp" class="text-xs text-text-muted"
-                                >Select a specific CCNA topic to focus on</p
+                                >Select topics to focus on</p
                             >
                         </div>
 
@@ -339,6 +338,9 @@
                             <select id="sourceSelect" class="form-control" multiple>
                                 <option value="all">All Sources</option>
                             </select>
+                             <p id="sourceHelp" class="text-xs text-text-muted"
+                                >Filter by source material</p
+                            >
                         </div>
 
                         <div class="space-y-4">
@@ -348,6 +350,9 @@
                             <select id="chapterSelect" class="form-control" multiple>
                                 <option value="all">All Chapters</option>
                             </select>
+                             <p id="chapterHelp" class="text-xs text-text-muted"
+                                >Filter by chapter or section number</p
+                            >
                         </div>
 
                         <div class="lg:col-span-3 space-y-4">

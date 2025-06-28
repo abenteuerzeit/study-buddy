@@ -1238,7 +1238,7 @@ const initApp = async () => {
   } catch (error) {
     console.error("Failed to load flashcards:", error);
     showMessage(
-      "Failed to load flashcard data. Please check your internet connection and try again.",
+      "Failed to load flashcard data. Please check your internet connection and try again.", // Generic message
     );
     DOMElements.loadingScreen.classList.add("hidden");
   }
