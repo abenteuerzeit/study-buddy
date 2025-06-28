@@ -56,18 +56,8 @@
           <button id="toggleStatsBtn" class="btn btn-info">
             <i class="fas fa-chart-line mr-2"></i>Statistics
           </button>
-          <button id="exportProgressBtn" class="btn btn-secondary">
-            <i class="fas fa-download mr-2"></i>Export
-          </button>
-          <input
-            type="file"
-            id="importProgressInput"
-            class="hidden"
-            accept=".json"
-            aria-label="Import progress file"
-          />
-          <button id="importProgressBtn" class="btn btn-secondary">
-            <i class="fas fa-upload mr-2"></i>Import
+          <button id="toggleSettingsBtn" class="btn btn-secondary">
+            <i class="fas fa-cog mr-2"></i>Settings
           </button>
         </nav>
       </div>
@@ -79,8 +69,8 @@
         class="card mb-8 hidden section-fade-in"
         aria-hidden="true"
       >
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-accent-cyan flex items-center">
+        <div class="flex flex-col sm:flex-row items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-accent-cyan flex items-center mb-4 sm:mb-0">
             <i class="fas fa-graduation-cap mr-3"></i>
             Flashcards
           </h2>
@@ -94,56 +84,6 @@
               <div class="text-xs text-text-muted">Study Streak</div>
             </div>
           </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div class="space-y-4">
-            <label for="studyCategorySelect" class="block text-sm font-medium">
-              <i class="fas fa-filter mr-2"></i>Category Filter
-            </label>
-            <select
-              id="studyCategorySelect"
-              class="form-control"
-              aria-describedby="studyCategoryHelp"
-            >
-              <option value="all">All Categories</option>
-            </select>
-            <p id="studyCategoryHelp" class="text-xs text-text-muted"
-              >Select a specific CCNA topic to focus on</p
-            >
-          </div>
-
-          <div class="space-y-4">
-            <label for="sourceSelect" class="block text-sm font-medium">
-              <i class="fas fa-book mr-2"></i>Source Filter
-            </label>
-            <select id="sourceSelect" class="form-control">
-              <option value="all">All Sources</option>
-            </select>
-          </div>
-
-          <div class="space-y-4">
-            <label for="chapterSelect" class="block text-sm font-medium">
-              <i class="fas fa-bookmark mr-2"></i>Chapter Filter
-            </label>
-            <select id="chapterSelect" class="form-control">
-              <option value="all">All Chapters</option>
-            </select>
-          </div>
-
-          <div class="lg:col-span-3 space-y-4">
-            <label for="searchInput" class="block text-sm font-medium">
-              <i class="fas fa-search mr-2"></i>Search
-            </label>
-            <input
-              type="text"
-              id="searchInput"
-              class="form-control"
-              placeholder="Find cards containing terms or definitions..."
-            />
-          </div>
-
-          <div class="flex flex-col justify-end space-y-2"> </div>
         </div>
 
         <div class="mb-6">
@@ -181,10 +121,10 @@
           <input
             type="text"
             id="flashcardAnswerInput"
-            class="form-control mb-4 hidden"
+            class="form-control mb-4"
             placeholder="Type your answer here"
           />
-          <button id="submitFlashcardAnswerBtn" class="btn btn-primary hidden"
+          <button id="submitFlashcardAnswerBtn" class="btn btn-primary"
             >Submit Answer</button
           >
           <div
@@ -195,7 +135,7 @@
           </div>
           <div
             id="flashcardFeedback"
-            class="text-xl font-bold mt-4 hidden"
+            class="text-xl font-bold mt-4"
           ></div>
 
           <div class="absolute top-4 left-4 flex items-center space-x-4">
@@ -321,6 +261,156 @@
               Your best consecutive study days record.</li
             >
           </ul>
+        </div>
+
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold mb-3">Progress Management:</h3>
+            <div class="flex flex-wrap justify-center gap-4">
+               <button id="exportProgressBtn" class="btn btn-secondary">
+                <i class="fas fa-download mr-2"></i>Export Progress
+              </button>
+              <input
+                type="file"
+                id="importProgressInput"
+                class="hidden"
+                accept=".json"
+                aria-label="Import progress file"
+              />
+              <button id="importProgressBtn" class="btn btn-secondary">
+                <i class="fas fa-upload mr-2"></i>Import Progress
+              </button>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold mb-3">Card Lists:</h3>
+            <div class="flex flex-wrap justify-center gap-4 mb-4">
+                <button id="showTotalCardsBtn" class="btn btn-secondary">Total Cards</button>
+                <button id="showMasteredCardsBtn" class="btn btn-secondary">Mastered Cards</button>
+                <button id="showDueCardsBtn" class="btn btn-secondary">Due for Review</button>
+            </div>
+            <div id="statisticsCardList" class="card-list-area">
+                <!-- Card list will be displayed here -->
+            </div>
+        </div>
+
+      </section>
+
+      <section
+        id="settings"
+        class="card mb-8 hidden section-fade-in"
+        aria-hidden="true"
+      >
+        <h2 class="text-2xl font-bold text-accent-cyan flex items-center mb-6">
+          <i class="fas fa-cog mr-3"></i>
+          Study Settings & Management
+        </h2>
+
+        <div class="space-y-6">
+            <!-- Study Settings Section -->
+            <div class="border border-border rounded-lg p-4">
+                <button id="toggleStudySettingsBtn" class="w-full text-left text-xl font-semibold text-text-primary flex justify-between items-center focus:outline-none">
+                    Study Session Settings
+                    <i id="studySettingsToggleIcon" class="fas fa-chevron-down transition-transform duration-300"></i>
+                </button>
+                <div id="studySettingsContent" class="mt-4 space-y-4 hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="space-y-4">
+                            <label for="studyCategorySelect" class="block text-sm font-medium">
+                                <i class="fas fa-filter mr-2"></i>Category Filter
+                            </label>
+                            <select
+                                id="studyCategorySelect"
+                                class="form-control"
+                                aria-describedby="studyCategoryHelp"
+                                multiple
+                            >
+                                <option value="all">All Categories</option>
+                            </select>
+                            <p id="studyCategoryHelp" class="text-xs text-text-muted"
+                                >Select a specific CCNA topic to focus on</p
+                            >
+                        </div>
+
+                        <div class="space-y-4">
+                            <label for="sourceSelect" class="block text-sm font-medium">
+                                <i class="fas fa-book mr-2"></i>Source Filter
+                            </label>
+                            <select id="sourceSelect" class="form-control" multiple>
+                                <option value="all">All Sources</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label for="chapterSelect" class="block text-sm font-medium">
+                                <i class="fas fa-bookmark mr-2"></i>Chapter Filter
+                            </label>
+                            <select id="chapterSelect" class="form-control" multiple>
+                                <option value="all">All Chapters</option>
+                            </select>
+                        </div>
+
+                        <div class="lg:col-span-3 space-y-4">
+                            <label for="searchInput" class="block text-sm font-medium">
+                                <i class="fas fa-search mr-2"></i>Search
+                            </label>
+                            <input
+                                type="text"
+                                id="searchInput"
+                                class="form-control"
+                                placeholder="Find cards containing terms or definitions..."
+                            />
+                            <div id="searchResultsPreview" class="mt-4 space-y-4 card-list-area">
+                                <!-- Search results will be displayed here -->
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-3 flex flex-wrap justify-center gap-4 mt-4">
+                            <button id="startStudySessionBtn" class="btn btn-primary" disabled title="Select filters to enable study session">
+                                <i class="fas fa-play mr-2"></i>Start Study Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flashcard Data Management Section -->
+            <div class="border border-border rounded-lg p-4">
+                <button id="toggleDataManagementBtn" class="w-full text-left text-xl font-semibold text-text-primary flex justify-between items-center focus:outline-none">
+                    Flashcard Data Management
+                    <i id="dataManagementToggleIcon" class="fas fa-chevron-down transition-transform duration-300"></i>
+                </button>
+                <div id="dataManagementContent" class="mt-4 space-y-4 hidden">
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button id="exportFlashcardsBtn" class="btn btn-secondary">
+                            <i class="fas fa-file-export mr-2"></i>Export Flashcards
+                        </button>
+                        <input
+                            type="file"
+                            id="importFlashcardsInput"
+                            class="hidden"
+                            accept=".json"
+                            aria-label="Import flashcard data file"
+                        />
+                        <button id="importFlashcardsBtn" class="btn btn-secondary">
+                            <i class="fas fa-file-import mr-2"></i>Import Flashcards
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Flashcards (CRUD) Section -->
+            <div class="border border-border rounded-lg p-4">
+                <button id="toggleFlashcardCrudBtn" class="w-full text-left text-xl font-semibold text-text-primary flex justify-between items-center focus:outline-none">
+                    Manage Flashcards (Add/Edit/Delete)
+                    <i id="flashcardCrudToggleIcon" class="fas fa-chevron-down transition-transform duration-300"></i>
+                </button>
+                <div id="flashcardCrudContent" class="mt-4 space-y-4 hidden">
+                    <div id="flashcardCrudArea" class="space-y-4">
+                        <!-- CRUD UI will be rendered here by JavaScript -->
+                    </div>
+                </div>
+            </div>
         </div>
       </section>
     </main>
